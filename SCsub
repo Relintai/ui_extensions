@@ -3,6 +3,3 @@ Import('env')
 env.add_source_files(env.modules_sources,"register_types.cpp")
 
 env.add_source_files(env.modules_sources,"touch_button.cpp")
-env.add_source_files(env.modules_sources,"mesh_data_resource.cpp")
-env.add_source_files(env.modules_sources,"editor_import_collada_mdr.cpp")
-env.add_source_files(env.modules_sources,"editor_plugin_collada_mdr.cpp")
