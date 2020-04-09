@@ -23,7 +23,13 @@ SOFTWARE.
 #ifndef BS_INPUT_EVENT_KEY_H
 #define BS_INPUT_EVENT_KEY_H
 
+#include "core/version.h"
+
+#if VERSION_MAJOR < 4
 #include "core/os/input_event.h"
+#else
+#include "core/input/input_event.h"
+#endif
 
 class BSInputEventKey : public InputEventKey {
 	GDCLASS(BSInputEventKey, InputEventKey);
