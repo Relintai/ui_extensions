@@ -92,7 +92,6 @@ void TouchButton::_input(Ref<InputEvent> p_event) {
 	}*/
 }
 
-
 void TouchButton::_gui_input(Ref<InputEvent> p_event) {
 	if (p_event->get_device() == -1) {
 		accept_event();
@@ -120,6 +119,6 @@ bool TouchButton::_is_point_inside(const Vector2 &vec) {
 	Point2 point;
 	point.x = vec.x;
 	point.y = vec.y;
-	
+
 	return get_global_rect().has_point(point);
 }

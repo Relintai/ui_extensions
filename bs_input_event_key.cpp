@@ -32,13 +32,12 @@ void BSInputEventKey::from_input_event_key(const Ref<InputEventKey> event) {
 	set_command(event->get_command());
 
 	set_pressed(event->is_pressed());
-	
 
-	#if VERSION_MAJOR < 4
+#if VERSION_MAJOR < 4
 	set_scancode(event->get_scancode());
-	#else
+#else
 	set_keycode(event->get_keycode());
-	#endif
+#endif
 
 	set_unicode(event->get_unicode());
 	set_echo(event->is_echo());
@@ -50,13 +49,13 @@ bool BSInputEventKey::action_match(const Ref<InputEvent> &p_event, bool *p_press
 	if (key.is_null())
 		return false;
 
-	#if VERSION_MAJOR < 4
+#if VERSION_MAJOR < 4
 	uint32_t code = get_scancode_with_modifiers();
 	uint32_t event_code = key->get_scancode_with_modifiers();
-	#else
+#else
 	uint32_t code = get_keycode_with_modifiers();
 	uint32_t event_code = key->get_keycode_with_modifiers();
-	#endif
+#endif
 
 	bool match = code == event_code;
 	if (match) {
