@@ -311,7 +311,7 @@ void InputMapEditor::_press_a_key_confirm() {
 	if (last_wait_for_key.is_null())
 		return;
 
-	Ref<InputEventKey> ie;
+	Ref<BSInputEventKey> ie;
 	ie.instance();
 	ie->set_scancode(last_wait_for_key->get_scancode());
 	ie->set_shift(last_wait_for_key->get_shift());
@@ -940,6 +940,8 @@ void InputMapEditor::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_drag_data_fw"), &InputMapEditor::get_drag_data_fw);
 	ClassDB::bind_method(D_METHOD("can_drop_data_fw"), &InputMapEditor::can_drop_data_fw);
 	ClassDB::bind_method(D_METHOD("drop_data_fw"), &InputMapEditor::drop_data_fw);
+
+	ClassDB::bind_method(D_METHOD("queue_save"), &InputMapEditor::queue_save);
 
 	ClassDB::bind_method(D_METHOD("get_add_texture"), &InputMapEditor::get_add_texture);
 	ClassDB::bind_method(D_METHOD("set_add_texture", "tex"), &InputMapEditor::set_add_texture);
