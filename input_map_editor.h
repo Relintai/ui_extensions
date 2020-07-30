@@ -32,15 +32,15 @@
 #define INPUT_MAP_EDITOR_H
 
 #include "scene/gui/dialogs.h"
+#include "scene/gui/margin_container.h"
 #include "scene/gui/menu_button.h"
 #include "scene/gui/option_button.h"
+#include "scene/gui/panel_container.h"
 #include "scene/gui/popup_menu.h"
-#include "scene/gui/tab_container.h"
 #include "scene/gui/tree.h"
 
-class InputMapEditor : public AcceptDialog {
-
-	GDCLASS(InputMapEditor, AcceptDialog);
+class InputMapEditor : public MarginContainer {
+	GDCLASS(InputMapEditor, MarginContainer);
 
 	enum InputType {
 		INPUT_KEY,
@@ -53,8 +53,6 @@ class InputMapEditor : public AcceptDialog {
 		SHOW_ALL_LOCALES,
 		SHOW_ONLY_SELECTED_LOCALES,
 	};
-
-	TabContainer *tab_container;
 
 	Timer *timer;
 	InputType add_type;
@@ -110,8 +108,6 @@ protected:
 	String _get_device_string(int i_device);
 
 public:
-	TabContainer *get_tabs();
-
 	void queue_save();
 
 	InputMapEditor();

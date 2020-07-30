@@ -39,7 +39,6 @@
 #include "editor/editor_node.h"
 #include "editor/editor_scale.h"
 #include "scene/gui/margin_container.h"
-#include "scene/gui/tab_container.h"
 
 static const char *_button_names[JOY_BUTTON_MAX] = {
 	"DualShock Cross, Xbox A, Nintendo B",
@@ -86,9 +85,11 @@ void InputMapEditor::_notification(int p_what) {
 			popup_add->add_icon_item(get_icon("Mouse", "EditorIcons"), TTR("Mouse Button"), INPUT_MOUSE_BUTTON);
 
 		} break;
-		case NOTIFICATION_POPUP_HIDE: {
-			EditorSettings::get_singleton()->set_project_metadata("dialog_bounds", "project_settings", get_rect());
-			set_process_unhandled_input(false);
+		case NOTIFICATION_VISIBILITY_CHANGED: {
+			if (!is_visible()) {
+				//EditorSettings::get_singleton()->set_project_metadata("dialog_bounds", "project_settings", get_rect());
+				set_process_unhandled_input(false);
+			}
 		} break;
 		case EditorSettings::NOTIFICATION_EDITOR_SETTINGS_CHANGED: {
 			popup_add->set_item_icon(popup_add->get_item_index(INPUT_KEY), get_icon("Keyboard", "EditorIcons"));
@@ -888,11 +889,6 @@ void InputMapEditor::drop_data_fw(const Point2 &p_point, const Variant &p_data, 
 	_settings_changed();
 }
 
-TabContainer *InputMapEditor::get_tabs() {
-
-	return tab_container;
-}
-
 void InputMapEditor::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("_item_checked"), &InputMapEditor::_item_checked);
@@ -909,42 +905,21 @@ void InputMapEditor::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("_settings_prop_edited"), &InputMapEditor::_settings_prop_edited);
 	ClassDB::bind_method(D_METHOD("_settings_changed"), &InputMapEditor::_settings_changed);
 
-	ClassDB::bind_method(D_METHOD("get_tabs"), &InputMapEditor::get_tabs);
-
 	ClassDB::bind_method(D_METHOD("get_drag_data_fw"), &InputMapEditor::get_drag_data_fw);
 	ClassDB::bind_method(D_METHOD("can_drop_data_fw"), &InputMapEditor::can_drop_data_fw);
 	ClassDB::bind_method(D_METHOD("drop_data_fw"), &InputMapEditor::drop_data_fw);
 }
 
 InputMapEditor::InputMapEditor() {
-	set_title(TTR("Project Settings (project.godot)"));
-	set_resizable(true);
-
-	tab_container = memnew(TabContainer);
-	tab_container->set_tab_align(TabContainer::ALIGN_LEFT);
-	tab_container->set_use_hidden_tabs_for_min_size(true);
-	add_child(tab_container);
-
-	get_ok()->set_text(TTR("Close"));
-	set_hide_on_ok(true);
-
-	message = memnew(AcceptDialog);
-	add_child(message);
-
-	Control *input_base = memnew(Control);
-	input_base->set_name(TTR("Input Map"));
-	tab_container->add_child(input_base);
-
 	VBoxContainer *vbc = memnew(VBoxContainer);
-	input_base->add_child(vbc);
-	vbc->set_anchor_and_margin(MARGIN_TOP, ANCHOR_BEGIN, 0);
-	vbc->set_anchor_and_margin(MARGIN_BOTTOM, ANCHOR_END, 0);
-	vbc->set_anchor_and_margin(MARGIN_LEFT, ANCHOR_BEGIN, 0);
-	vbc->set_anchor_and_margin(MARGIN_RIGHT, ANCHOR_END, 0);
+	add_child(vbc);
+	vbc->set_v_size_flags(SIZE_EXPAND_FILL);
+	vbc->set_h_size_flags(SIZE_EXPAND_FILL);
 
 	input_editor = memnew(Tree);
 	vbc->add_child(input_editor);
 	input_editor->set_v_size_flags(SIZE_EXPAND_FILL);
+	input_editor->set_h_size_flags(SIZE_EXPAND_FILL);
 	input_editor->set_columns(3);
 	input_editor->set_column_titles_visible(true);
 	input_editor->set_column_title(0, TTR("Action"));
