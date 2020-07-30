@@ -129,7 +129,7 @@ void InputMapEditor::_action_edited() {
 			add_at = "input/" + old_name;
 
 			message->set_text("Invalid action name. it cannot be empty nor contain '/', ':', '=', '\\' or '\"'");
-			message->popup_centered(Size2(300, 100) * EDSCALE);
+			message->popup_centered(Size2(300, 100));
 			return;
 		}
 
@@ -141,7 +141,7 @@ void InputMapEditor::_action_edited() {
 			add_at = "input/" + old_name;
 
 			message->set_text(vformat("An action with the name '%s' already exists.", new_name));
-			message->popup_centered(Size2(300, 100) * EDSCALE);
+			message->popup_centered(Size2(300, 100));
 			return;
 		}
 
@@ -381,7 +381,7 @@ void InputMapEditor::_add_item(int p_item, Ref<InputEvent> p_exiting_event) {
 			press_a_key_label->set_text(("Press a Key..."));
 			press_a_key->get_ok()->set_disabled(true);
 			last_wait_for_key = Ref<InputEvent>();
-			press_a_key->popup_centered(Size2(250, 80) * EDSCALE);
+			press_a_key->popup_centered(Size2(250, 80));
 			press_a_key->grab_focus();
 
 		} break;
@@ -398,7 +398,7 @@ void InputMapEditor::_add_item(int p_item, Ref<InputEvent> p_exiting_event) {
 			device_index->add_item(("Wheel Right Button"));
 			device_index->add_item(("X Button 1"));
 			device_index->add_item(("X Button 2"));
-			device_input->popup_centered_minsize(Size2(350, 95) * EDSCALE);
+			device_input->popup_centered_minsize(Size2(350, 95));
 
 			Ref<InputEventMouseButton> mb = p_exiting_event;
 			if (mb.is_valid()) {
@@ -420,7 +420,7 @@ void InputMapEditor::_add_item(int p_item, Ref<InputEvent> p_exiting_event) {
 				String desc = _axis_names[i];
 				device_index->add_item("Axis " + itos(i / 2) + " " + ((i & 1) ? "+" : "-") + desc);
 			}
-			device_input->popup_centered_minsize(Size2(350, 95) * EDSCALE);
+			device_input->popup_centered_minsize(Size2(350, 95));
 
 			Ref<InputEventJoypadMotion> jm = p_exiting_event;
 			if (jm.is_valid()) {
@@ -442,7 +442,7 @@ void InputMapEditor::_add_item(int p_item, Ref<InputEvent> p_exiting_event) {
 
 				device_index->add_item(itos(i) + ": " + String(_button_names[i]));
 			}
-			device_input->popup_centered_minsize(Size2(350, 95) * EDSCALE);
+			device_input->popup_centered_minsize(Size2(350, 95));
 
 			Ref<InputEventJoypadButton> jb = p_exiting_event;
 			if (jb.is_valid()) {
@@ -705,7 +705,7 @@ void InputMapEditor::_save() {
 
 	Error err = ProjectSettings::get_singleton()->save();
 	message->set_text(err != OK ? "Error saving settings." : "Settings saved OK.");
-	message->popup_centered(Size2(300, 100) * EDSCALE);
+	message->popup_centered(Size2(300, 100));
 }
 
 void InputMapEditor::_settings_prop_edited(const String &p_name) {
@@ -916,9 +916,9 @@ InputMapEditor::InputMapEditor() {
 	input_editor->set_column_title(0, "Action");
 	input_editor->set_column_title(1, "Deadzone");
 	input_editor->set_column_expand(1, false);
-	input_editor->set_column_min_width(1, 80 * EDSCALE);
+	input_editor->set_column_min_width(1, 80);
 	input_editor->set_column_expand(2, false);
-	input_editor->set_column_min_width(2, 50 * EDSCALE);
+	input_editor->set_column_min_width(2, 50);
 	input_editor->connect("item_edited", this, "_action_edited");
 	input_editor->connect("item_activated", this, "_action_activated");
 	input_editor->connect("cell_selected", this, "_action_selected");
