@@ -4,3 +4,5 @@ env.add_source_files(env.modules_sources,"register_types.cpp")
 
 env.add_source_files(env.modules_sources,"touch_button.cpp")
 env.add_source_files(env.modules_sources,"bs_input_event_key.cpp")
+
+env.add_source_files(env.modules_sources,"input_map_editor.cpp")

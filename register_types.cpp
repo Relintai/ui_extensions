@@ -23,11 +23,13 @@ SOFTWARE.
 #include "register_types.h"
 
 #include "bs_input_event_key.h"
+#include "input_map_editor.h"
 #include "touch_button.h"
 
 void register_ui_extensions_types() {
 	ClassDB::register_class<TouchButton>();
 	ClassDB::register_class<BSInputEventKey>();
+	ClassDB::register_class<InputMapEditor>();
 }
 
 void unregister_ui_extensions_types() {
