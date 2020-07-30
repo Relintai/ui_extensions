@@ -40,6 +40,8 @@
 #include "editor/editor_scale.h"
 #include "scene/gui/margin_container.h"
 
+#include "core/ustring.h"
+
 static const char *_button_names[JOY_BUTTON_MAX] = {
 	"DualShock Cross, Xbox A, Nintendo B",
 	"DualShock Circle, Xbox B, Nintendo A",
@@ -79,10 +81,10 @@ void InputMapEditor::_notification(int p_what) {
 		case NOTIFICATION_ENTER_TREE: {
 
 			_update_actions();
-			popup_add->add_icon_item(_keyboard_texture, TTR("Key "), INPUT_KEY); //"Key " - because the word 'key' has already been used as a key animation
-			popup_add->add_icon_item(_joybutton_texture, TTR("Joy Button"), INPUT_JOY_BUTTON);
-			popup_add->add_icon_item(_joyaxis_texture, TTR("Joy Axis"), INPUT_JOY_MOTION);
-			popup_add->add_icon_item(_mouse_texture, TTR("Mouse Button"), INPUT_MOUSE_BUTTON);
+			popup_add->add_icon_item(_keyboard_texture, "Key ", INPUT_KEY); //"Key " - because the word 'key' has already been used as a key animation
+			popup_add->add_icon_item(_joybutton_texture, "Joy Button", INPUT_JOY_BUTTON);
+			popup_add->add_icon_item(_joyaxis_texture, "Joy Axis", INPUT_JOY_MOTION);
+			popup_add->add_icon_item(_mouse_texture, "Mouse Button", INPUT_MOUSE_BUTTON);
 
 		} break;
 	}
@@ -126,7 +128,7 @@ void InputMapEditor::_action_edited() {
 			ti->set_text(0, old_name);
 			add_at = "input/" + old_name;
 
-			message->set_text(TTR("Invalid action name. it cannot be empty nor contain '/', ':', '=', '\\' or '\"'"));
+			message->set_text("Invalid action name. it cannot be empty nor contain '/', ':', '=', '\\' or '\"'");
 			message->popup_centered(Size2(300, 100) * EDSCALE);
 			return;
 		}
@@ -138,7 +140,7 @@ void InputMapEditor::_action_edited() {
 			ti->set_text(0, old_name);
 			add_at = "input/" + old_name;
 
-			message->set_text(vformat(TTR("An action with the name '%s' already exists."), new_name));
+			message->set_text(vformat("An action with the name '%s' already exists.", new_name));
 			message->popup_centered(Size2(300, 100) * EDSCALE);
 			return;
 		}
@@ -270,9 +272,9 @@ int InputMapEditor::_get_current_device() {
 
 String InputMapEditor::_get_device_string(int i_device) {
 	if (i_device == InputMap::ALL_DEVICES)
-		return TTR("All Devices");
+		return "All Devices";
 
-	return TTR("Device") + " " + itos(i_device);
+	return "Device " + itos(i_device);
 }
 
 void InputMapEditor::_press_a_key_confirm() {
@@ -376,7 +378,7 @@ void InputMapEditor::_add_item(int p_item, Ref<InputEvent> p_exiting_event) {
 
 		case INPUT_KEY: {
 
-			press_a_key_label->set_text(TTR("Press a Key..."));
+			press_a_key_label->set_text(("Press a Key..."));
 			press_a_key->get_ok()->set_disabled(true);
 			last_wait_for_key = Ref<InputEvent>();
 			press_a_key->popup_centered(Size2(250, 80) * EDSCALE);
@@ -385,38 +387,38 @@ void InputMapEditor::_add_item(int p_item, Ref<InputEvent> p_exiting_event) {
 		} break;
 		case INPUT_MOUSE_BUTTON: {
 
-			device_index_label->set_text(TTR("Mouse Button Index:"));
+			device_index_label->set_text(("Mouse Button Index:"));
 			device_index->clear();
-			device_index->add_item(TTR("Left Button"));
-			device_index->add_item(TTR("Right Button"));
-			device_index->add_item(TTR("Middle Button"));
-			device_index->add_item(TTR("Wheel Up Button"));
-			device_index->add_item(TTR("Wheel Down Button"));
-			device_index->add_item(TTR("Wheel Left Button"));
-			device_index->add_item(TTR("Wheel Right Button"));
-			device_index->add_item(TTR("X Button 1"));
-			device_index->add_item(TTR("X Button 2"));
+			device_index->add_item(("Left Button"));
+			device_index->add_item(("Right Button"));
+			device_index->add_item(("Middle Button"));
+			device_index->add_item(("Wheel Up Button"));
+			device_index->add_item(("Wheel Down Button"));
+			device_index->add_item(("Wheel Left Button"));
+			device_index->add_item(("Wheel Right Button"));
+			device_index->add_item(("X Button 1"));
+			device_index->add_item(("X Button 2"));
 			device_input->popup_centered_minsize(Size2(350, 95) * EDSCALE);
 
 			Ref<InputEventMouseButton> mb = p_exiting_event;
 			if (mb.is_valid()) {
 				device_index->select(mb->get_button_index() - 1);
 				_set_current_device(mb->get_device());
-				device_input->get_ok()->set_text(TTR("Change"));
+				device_input->get_ok()->set_text("Change");
 			} else {
 				_set_current_device(0);
-				device_input->get_ok()->set_text(TTR("Add"));
+				device_input->get_ok()->set_text("Add");
 			}
 
 		} break;
 		case INPUT_JOY_MOTION: {
 
-			device_index_label->set_text(TTR("Joypad Axis Index:"));
+			device_index_label->set_text("Joypad Axis Index:");
 			device_index->clear();
 			for (int i = 0; i < JOY_AXIS_MAX * 2; i++) {
 
 				String desc = _axis_names[i];
-				device_index->add_item(TTR("Axis") + " " + itos(i / 2) + " " + ((i & 1) ? "+" : "-") + desc);
+				device_index->add_item("Axis " + itos(i / 2) + " " + ((i & 1) ? "+" : "-") + desc);
 			}
 			device_input->popup_centered_minsize(Size2(350, 95) * EDSCALE);
 
@@ -424,16 +426,16 @@ void InputMapEditor::_add_item(int p_item, Ref<InputEvent> p_exiting_event) {
 			if (jm.is_valid()) {
 				device_index->select(jm->get_axis() * 2 + (jm->get_axis_value() > 0 ? 1 : 0));
 				_set_current_device(jm->get_device());
-				device_input->get_ok()->set_text(TTR("Change"));
+				device_input->get_ok()->set_text("Change");
 			} else {
 				_set_current_device(0);
-				device_input->get_ok()->set_text(TTR("Add"));
+				device_input->get_ok()->set_text("Add");
 			}
 
 		} break;
 		case INPUT_JOY_BUTTON: {
 
-			device_index_label->set_text(TTR("Joypad Button Index:"));
+			device_index_label->set_text("Joypad Button Index:");
 			device_index->clear();
 
 			for (int i = 0; i < JOY_BUTTON_MAX; i++) {
@@ -446,10 +448,10 @@ void InputMapEditor::_add_item(int p_item, Ref<InputEvent> p_exiting_event) {
 			if (jb.is_valid()) {
 				device_index->select(jb->get_button_index());
 				_set_current_device(jb->get_device());
-				device_input->get_ok()->set_text(TTR("Change"));
+				device_input->get_ok()->set_text("Change");
 			} else {
 				_set_current_device(0);
-				device_input->get_ok()->set_text(TTR("Add"));
+				device_input->get_ok()->set_text("Add");
 			}
 
 		} break;
@@ -624,7 +626,7 @@ void InputMapEditor::_update_actions() {
 		item->set_range(1, action["deadzone"]);
 		item->set_custom_bg_color(1, get_color("prop_subsection", "Editor"));
 
-		item->add_button(2, _add_texture, 1, false, TTR("Add Event"));
+		item->add_button(2, _add_texture, 1, false, "Add Event");
 
 		for (int i = 0; i < events.size(); i++) {
 
@@ -647,7 +649,7 @@ void InputMapEditor::_update_actions() {
 
 			if (jb.is_valid()) {
 
-				String str = _get_device_string(jb->get_device()) + ", " + TTR("Button") + " " + itos(jb->get_button_index());
+				String str = _get_device_string(jb->get_device()) + ", Button " + itos(jb->get_button_index());
 				if (jb->get_button_index() >= 0 && jb->get_button_index() < JOY_BUTTON_MAX)
 					str += String() + " (" + _button_names[jb->get_button_index()] + ").";
 				else
@@ -662,12 +664,12 @@ void InputMapEditor::_update_actions() {
 			if (mb.is_valid()) {
 				String str = _get_device_string(mb->get_device()) + ", ";
 				switch (mb->get_button_index()) {
-					case BUTTON_LEFT: str += TTR("Left Button."); break;
-					case BUTTON_RIGHT: str += TTR("Right Button."); break;
-					case BUTTON_MIDDLE: str += TTR("Middle Button."); break;
-					case BUTTON_WHEEL_UP: str += TTR("Wheel Up."); break;
-					case BUTTON_WHEEL_DOWN: str += TTR("Wheel Down."); break;
-					default: str += TTR("Button") + " " + itos(mb->get_button_index()) + ".";
+					case BUTTON_LEFT: str += "Left Button."; break;
+					case BUTTON_RIGHT: str += "Right Button."; break;
+					case BUTTON_MIDDLE: str += "Middle Button."; break;
+					case BUTTON_WHEEL_UP: str += "Wheel Up."; break;
+					case BUTTON_WHEEL_DOWN: str += "Wheel Down."; break;
+					default: str += "Button " + itos(mb->get_button_index()) + ".";
 				}
 
 				action2->set_text(0, str);
@@ -681,15 +683,15 @@ void InputMapEditor::_update_actions() {
 				int ax = jm->get_axis();
 				int n = 2 * ax + (jm->get_axis_value() < 0 ? 0 : 1);
 				String desc = _axis_names[n];
-				String str = _get_device_string(jm->get_device()) + ", " + TTR("Axis") + " " + itos(ax) + " " + (jm->get_axis_value() < 0 ? "-" : "+") + desc + ".";
+				String str = _get_device_string(jm->get_device()) + ", " + "Axis" + " " + itos(ax) + " " + (jm->get_axis_value() < 0 ? "-" : "+") + desc + ".";
 				action2->set_text(0, str);
 				action2->set_icon(0, _joyaxis_texture);
 			}
 			action2->set_metadata(0, i);
 			action2->set_meta("__input", event);
 
-			action2->add_button(2, _edit_texture, 3, false, TTR("Edit"));
-			action2->add_button(2, _remove_texture, 2, false, TTR("Remove"));
+			action2->add_button(2, _edit_texture, 3, false, "Edit");
+			action2->add_button(2, _remove_texture, 2, false, "Remove");
 		}
 	}
 
@@ -702,7 +704,7 @@ void InputMapEditor::_item_checked(const String &p_item, bool p_check) {
 void InputMapEditor::_save() {
 
 	Error err = ProjectSettings::get_singleton()->save();
-	message->set_text(err != OK ? TTR("Error saving settings.") : TTR("Settings saved OK."));
+	message->set_text(err != OK ? "Error saving settings." : "Settings saved OK.");
 	message->popup_centered(Size2(300, 100) * EDSCALE);
 }
 
@@ -827,7 +829,7 @@ void InputMapEditor::drop_data_fw(const Point2 &p_point, const Variant &p_data, 
 	bool is_below = target_order > old_order;
 	TreeItem *iterator = is_below ? selected->get_next() : selected->get_prev();
 
-	//undo_redo->create_action(TTR("Moved Input Action Event"));
+	//undo_redo->create_action("Moved Input Action Event");
 	while (iterator != target) {
 
 		String iterator_name = "input/" + iterator->get_text(0);
@@ -911,8 +913,8 @@ InputMapEditor::InputMapEditor() {
 	input_editor->set_h_size_flags(SIZE_EXPAND_FILL);
 	input_editor->set_columns(3);
 	input_editor->set_column_titles_visible(true);
-	input_editor->set_column_title(0, TTR("Action"));
-	input_editor->set_column_title(1, TTR("Deadzone"));
+	input_editor->set_column_title(0, "Action");
+	input_editor->set_column_title(1, "Deadzone");
 	input_editor->set_column_expand(1, false);
 	input_editor->set_column_min_width(1, 80 * EDSCALE);
 	input_editor->set_column_expand(2, false);
@@ -932,7 +934,7 @@ InputMapEditor::InputMapEditor() {
 	add_child(press_a_key);
 
 	Label *l = memnew(Label);
-	l->set_text(TTR("Press a Key..."));
+	l->set_text("Press a Key...");
 	l->set_anchors_and_margins_preset(Control::PRESET_WIDE);
 	l->set_align(Label::ALIGN_CENTER);
 	l->set_margin(MARGIN_TOP, 20);
@@ -945,7 +947,7 @@ InputMapEditor::InputMapEditor() {
 
 	device_input = memnew(ConfirmationDialog);
 	add_child(device_input);
-	device_input->get_ok()->set_text(TTR("Add"));
+	device_input->get_ok()->set_text("Add");
 	device_input->connect("confirmed", this, "_device_input_add");
 
 	HBoxContainer *hbc = memnew(HBoxContainer);
@@ -955,7 +957,7 @@ InputMapEditor::InputMapEditor() {
 	hbc->add_child(vbc_left);
 
 	l = memnew(Label);
-	l->set_text(TTR("Device:"));
+	l->set_text("Device:");
 	vbc_left->add_child(l);
 
 	device_id = memnew(OptionButton);
@@ -969,7 +971,7 @@ InputMapEditor::InputMapEditor() {
 	vbc_right->set_h_size_flags(SIZE_EXPAND_FILL);
 
 	l = memnew(Label);
-	l->set_text(TTR("Index:"));
+	l->set_text("Index:");
 	vbc_right->add_child(l);
 	device_index_label = l;
 
