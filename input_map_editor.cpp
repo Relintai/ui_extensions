@@ -79,24 +79,11 @@ void InputMapEditor::_notification(int p_what) {
 		case NOTIFICATION_ENTER_TREE: {
 
 			_update_actions();
-			popup_add->add_icon_item(get_icon("Keyboard", "EditorIcons"), TTR("Key "), INPUT_KEY); //"Key " - because the word 'key' has already been used as a key animation
-			popup_add->add_icon_item(get_icon("JoyButton", "EditorIcons"), TTR("Joy Button"), INPUT_JOY_BUTTON);
-			popup_add->add_icon_item(get_icon("JoyAxis", "EditorIcons"), TTR("Joy Axis"), INPUT_JOY_MOTION);
-			popup_add->add_icon_item(get_icon("Mouse", "EditorIcons"), TTR("Mouse Button"), INPUT_MOUSE_BUTTON);
+			popup_add->add_icon_item(_keyboard_texture, TTR("Key "), INPUT_KEY); //"Key " - because the word 'key' has already been used as a key animation
+			popup_add->add_icon_item(_joybutton_texture, TTR("Joy Button"), INPUT_JOY_BUTTON);
+			popup_add->add_icon_item(_joyaxis_texture, TTR("Joy Axis"), INPUT_JOY_MOTION);
+			popup_add->add_icon_item(_mouse_texture, TTR("Mouse Button"), INPUT_MOUSE_BUTTON);
 
-		} break;
-		case NOTIFICATION_VISIBILITY_CHANGED: {
-			if (!is_visible()) {
-				//EditorSettings::get_singleton()->set_project_metadata("dialog_bounds", "project_settings", get_rect());
-				set_process_unhandled_input(false);
-			}
-		} break;
-		case EditorSettings::NOTIFICATION_EDITOR_SETTINGS_CHANGED: {
-			popup_add->set_item_icon(popup_add->get_item_index(INPUT_KEY), get_icon("Keyboard", "EditorIcons"));
-			popup_add->set_item_icon(popup_add->get_item_index(INPUT_JOY_BUTTON), get_icon("JoyButton", "EditorIcons"));
-			popup_add->set_item_icon(popup_add->get_item_index(INPUT_JOY_MOTION), get_icon("JoyAxis", "EditorIcons"));
-			popup_add->set_item_icon(popup_add->get_item_index(INPUT_MOUSE_BUTTON), get_icon("Mouse", "EditorIcons"));
-			_update_actions();
 		} break;
 	}
 }
@@ -699,11 +686,7 @@ void InputMapEditor::_update_actions() {
 		item->set_range(1, action["deadzone"]);
 		item->set_custom_bg_color(1, get_color("prop_subsection", "Editor"));
 
-		item->add_button(2, get_icon("Add", "EditorIcons"), 1, false, TTR("Add Event"));
-		if (!ProjectSettings::get_singleton()->get_input_presets().find(pi.name)) {
-			item->add_button(2, get_icon("Remove", "EditorIcons"), 2, false, TTR("Remove"));
-			item->set_editable(0, true);
-		}
+		item->add_button(2, _add_texture, 1, false, TTR("Add Event"));
 
 		for (int i = 0; i < events.size(); i++) {
 
@@ -719,7 +702,7 @@ void InputMapEditor::_update_actions() {
 				const String str = keycode_get_string(k->get_scancode_with_modifiers());
 
 				action2->set_text(0, str);
-				action2->set_icon(0, get_icon("Keyboard", "EditorIcons"));
+				action2->set_icon(0, _keyboard_texture);
 			}
 
 			Ref<InputEventJoypadButton> jb = event;
@@ -733,7 +716,7 @@ void InputMapEditor::_update_actions() {
 					str += ".";
 
 				action2->set_text(0, str);
-				action2->set_icon(0, get_icon("JoyButton", "EditorIcons"));
+				action2->set_icon(0, _joybutton_texture);
 			}
 
 			Ref<InputEventMouseButton> mb = event;
@@ -750,7 +733,7 @@ void InputMapEditor::_update_actions() {
 				}
 
 				action2->set_text(0, str);
-				action2->set_icon(0, get_icon("Mouse", "EditorIcons"));
+				action2->set_icon(0, _mouse_texture);
 			}
 
 			Ref<InputEventJoypadMotion> jm = event;
@@ -762,13 +745,13 @@ void InputMapEditor::_update_actions() {
 				String desc = _axis_names[n];
 				String str = _get_device_string(jm->get_device()) + ", " + TTR("Axis") + " " + itos(ax) + " " + (jm->get_axis_value() < 0 ? "-" : "+") + desc + ".";
 				action2->set_text(0, str);
-				action2->set_icon(0, get_icon("JoyAxis", "EditorIcons"));
+				action2->set_icon(0, _joyaxis_texture);
 			}
 			action2->set_metadata(0, i);
 			action2->set_meta("__input", event);
 
-			action2->add_button(2, get_icon("Edit", "EditorIcons"), 3, false, TTR("Edit"));
-			action2->add_button(2, get_icon("Remove", "EditorIcons"), 2, false, TTR("Remove"));
+			action2->add_button(2, _edit_texture, 3, false, TTR("Edit"));
+			action2->add_button(2, _remove_texture, 2, false, TTR("Remove"));
 		}
 	}
 
@@ -794,6 +777,55 @@ void InputMapEditor::_settings_prop_edited(const String &p_name) {
 void InputMapEditor::_settings_changed() {
 
 	timer->start();
+}
+
+Ref<Texture> InputMapEditor::get_add_texture() {
+	return _add_texture;
+}
+void InputMapEditor::set_add_texture(const Ref<Texture> &tex) {
+	_add_texture = tex;
+}
+
+Ref<Texture> InputMapEditor::get_remove_texture() {
+	return _remove_texture;
+}
+void InputMapEditor::set_remove_texture(const Ref<Texture> &tex) {
+	_remove_texture = tex;
+}
+
+Ref<Texture> InputMapEditor::get_edit_texture() {
+	return _edit_texture;
+}
+void InputMapEditor::set_edit_texture(const Ref<Texture> &tex) {
+	_edit_texture = tex;
+}
+
+Ref<Texture> InputMapEditor::get_keyboard_texture() {
+	return _keyboard_texture;
+}
+void InputMapEditor::set_keyboard_texture(const Ref<Texture> &tex) {
+	_keyboard_texture = tex;
+}
+
+Ref<Texture> InputMapEditor::get_joybutton_texture() {
+	return _joybutton_texture;
+}
+void InputMapEditor::set_joybutton_texture(const Ref<Texture> &tex) {
+	_joybutton_texture = tex;
+}
+
+Ref<Texture> InputMapEditor::get_joyaxis_texture() {
+	return _joyaxis_texture;
+}
+void InputMapEditor::set_joyaxis_texture(const Ref<Texture> &tex) {
+	_joyaxis_texture = tex;
+}
+
+Ref<Texture> InputMapEditor::get_mouse_texture() {
+	return _mouse_texture;
+}
+void InputMapEditor::set_mouse_texture(const Ref<Texture> &tex) {
+	_mouse_texture = tex;
 }
 
 void InputMapEditor::queue_save() {
@@ -908,6 +940,34 @@ void InputMapEditor::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_drag_data_fw"), &InputMapEditor::get_drag_data_fw);
 	ClassDB::bind_method(D_METHOD("can_drop_data_fw"), &InputMapEditor::can_drop_data_fw);
 	ClassDB::bind_method(D_METHOD("drop_data_fw"), &InputMapEditor::drop_data_fw);
+
+	ClassDB::bind_method(D_METHOD("get_add_texture"), &InputMapEditor::get_add_texture);
+	ClassDB::bind_method(D_METHOD("set_add_texture", "tex"), &InputMapEditor::set_add_texture);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "add_texture", PROPERTY_HINT_RESOURCE_TYPE, "Texture"), "set_add_texture", "get_add_texture");
+
+	ClassDB::bind_method(D_METHOD("get_remove_texture"), &InputMapEditor::get_remove_texture);
+	ClassDB::bind_method(D_METHOD("set_remove_texture", "tex"), &InputMapEditor::set_remove_texture);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "remove_texture", PROPERTY_HINT_RESOURCE_TYPE, "Texture"), "set_remove_texture", "get_remove_texture");
+
+	ClassDB::bind_method(D_METHOD("get_edit_texture"), &InputMapEditor::get_edit_texture);
+	ClassDB::bind_method(D_METHOD("set_edit_texture", "tex"), &InputMapEditor::set_edit_texture);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "edit_texture", PROPERTY_HINT_RESOURCE_TYPE, "Texture"), "set_edit_texture", "get_edit_texture");
+
+	ClassDB::bind_method(D_METHOD("get_keyboard_texture"), &InputMapEditor::get_keyboard_texture);
+	ClassDB::bind_method(D_METHOD("set_keyboard_texture", "tex"), &InputMapEditor::set_keyboard_texture);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "keyboard_texture", PROPERTY_HINT_RESOURCE_TYPE, "Texture"), "set_keyboard_texture", "get_keyboard_texture");
+
+	ClassDB::bind_method(D_METHOD("get_joybutton_texture"), &InputMapEditor::get_joybutton_texture);
+	ClassDB::bind_method(D_METHOD("set_joybutton_texture", "tex"), &InputMapEditor::set_joybutton_texture);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "joybutton_texture", PROPERTY_HINT_RESOURCE_TYPE, "Texture"), "set_joybutton_texture", "get_joybutton_texture");
+
+	ClassDB::bind_method(D_METHOD("get_joyaxis_texture"), &InputMapEditor::get_joyaxis_texture);
+	ClassDB::bind_method(D_METHOD("set_joyaxis_texture", "tex"), &InputMapEditor::set_joyaxis_texture);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "joyaxis_texture", PROPERTY_HINT_RESOURCE_TYPE, "Texture"), "set_joyaxis_texture", "get_joyaxis_texture");
+
+	ClassDB::bind_method(D_METHOD("get_mouse_texture"), &InputMapEditor::get_mouse_texture);
+	ClassDB::bind_method(D_METHOD("set_mouse_texture", "tex"), &InputMapEditor::set_mouse_texture);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "mouse_texture", PROPERTY_HINT_RESOURCE_TYPE, "Texture"), "set_mouse_texture", "get_mouse_texture");
 }
 
 InputMapEditor::InputMapEditor() {

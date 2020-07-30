@@ -76,6 +76,14 @@ class InputMapEditor : public MarginContainer {
 
 	Ref<InputEventKey> last_wait_for_key;
 
+	Ref<Texture> _add_texture;
+	Ref<Texture> _remove_texture;
+	Ref<Texture> _edit_texture;
+	Ref<Texture> _keyboard_texture;
+	Ref<Texture> _joybutton_texture;
+	Ref<Texture> _joyaxis_texture;
+	Ref<Texture> _mouse_texture;
+
 	void _update_actions();
 	void _save();
 	void _add_item(int p_item, Ref<InputEvent> p_exiting_event = NULL);
@@ -108,6 +116,27 @@ protected:
 	String _get_device_string(int i_device);
 
 public:
+	Ref<Texture> get_add_texture();
+	void set_add_texture(const Ref<Texture> &tex);
+
+	Ref<Texture> get_remove_texture();
+	void set_remove_texture(const Ref<Texture> &tex);
+
+	Ref<Texture> get_edit_texture();
+	void set_edit_texture(const Ref<Texture> &tex);
+
+	Ref<Texture> get_keyboard_texture();
+	void set_keyboard_texture(const Ref<Texture> &tex);
+
+	Ref<Texture> get_joybutton_texture();
+	void set_joybutton_texture(const Ref<Texture> &tex);
+
+	Ref<Texture> get_joyaxis_texture();
+	void set_joyaxis_texture(const Ref<Texture> &tex);
+
+	Ref<Texture> get_mouse_texture();
+	void set_mouse_texture(const Ref<Texture> &tex);
+
 	void queue_save();
 
 	InputMapEditor();
