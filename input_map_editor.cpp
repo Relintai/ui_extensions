@@ -147,19 +147,6 @@ void InputMapEditor::_action_edited() {
 		Dictionary action = ProjectSettings::get_singleton()->get(add_at);
 
 		setting = true;
-		/*
-		undo_redo->create_action(TTR("Rename Input Action Event"));
-		undo_redo->add_do_method(ProjectSettings::get_singleton(), "clear", add_at);
-		undo_redo->add_do_method(ProjectSettings::get_singleton(), "set", action_prop, action);
-		undo_redo->add_do_method(ProjectSettings::get_singleton(), "set_order", action_prop, order);
-		undo_redo->add_undo_method(ProjectSettings::get_singleton(), "clear", action_prop);
-		undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set", add_at, action);
-		undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set_order", add_at, order);
-		undo_redo->add_do_method(this, "_update_actions");
-		undo_redo->add_undo_method(this, "_update_actions");
-		undo_redo->add_do_method(this, "_settings_changed");
-		undo_redo->add_undo_method(this, "_settings_changed");
-		undo_redo->commit_action();*/
 
 		ProjectSettings::get_singleton()->clear(add_at);
 		ProjectSettings::get_singleton()->set(action_prop, action);
@@ -176,14 +163,6 @@ void InputMapEditor::_action_edited() {
 		Dictionary old_action = ProjectSettings::get_singleton()->get(name);
 		Dictionary new_action = old_action.duplicate();
 		new_action["deadzone"] = ti->get_range(1);
-
-		/*
-		undo_redo->create_action(TTR("Change Action deadzone"));
-		undo_redo->add_do_method(ProjectSettings::get_singleton(), "set", name, new_action);
-		undo_redo->add_do_method(this, "_settings_changed");
-		undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set", name, old_action);
-		undo_redo->add_undo_method(this, "_settings_changed");
-		undo_redo->commit_action();*/
 
 		ProjectSettings::get_singleton()->set(name, new_action);
 		_settings_changed();
@@ -274,16 +253,6 @@ void InputMapEditor::_device_input_add() {
 	}
 	action["events"] = events;
 
-	/*
-	undo_redo->create_action(TTR("Add Input Action Event"));
-	undo_redo->add_do_method(ProjectSettings::get_singleton(), "set", name, action);
-	undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set", name, old_val);
-	undo_redo->add_do_method(this, "_update_actions");
-	undo_redo->add_undo_method(this, "_update_actions");
-	undo_redo->add_do_method(this, "_settings_changed");
-	undo_redo->add_undo_method(this, "_settings_changed");
-	undo_redo->commit_action();*/
-
 	ProjectSettings::get_singleton()->set(name, action);
 	_update_actions();
 	_settings_changed();
@@ -342,16 +311,6 @@ void InputMapEditor::_press_a_key_confirm() {
 		events[idx] = ie;
 	}
 	action["events"] = events;
-
-	/*
-	undo_redo->create_action(TTR("Add Input Action Event"));
-	undo_redo->add_do_method(ProjectSettings::get_singleton(), "set", name, action);
-	undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set", name, old_val);
-	undo_redo->add_do_method(this, "_update_actions");
-	undo_redo->add_undo_method(this, "_update_actions");
-	undo_redo->add_do_method(this, "_settings_changed");
-	undo_redo->add_undo_method(this, "_settings_changed");
-	undo_redo->commit_action();*/
 
 	ProjectSettings::get_singleton()->set(name, action);
 	_update_actions();
@@ -570,17 +529,6 @@ void InputMapEditor::_action_button_pressed(Object *p_obj, int p_column, int p_i
 			Dictionary old_val = ProjectSettings::get_singleton()->get(name);
 			//int order = ProjectSettings::get_singleton()->get_order(name);
 
-			/*
-			undo_redo->create_action(TTR("Erase Input Action"));
-			undo_redo->add_do_method(ProjectSettings::get_singleton(), "clear", name);
-			undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set", name, old_val);
-			undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set_order", name, order);
-			undo_redo->add_do_method(this, "_update_actions");
-			undo_redo->add_undo_method(this, "_update_actions");
-			undo_redo->add_do_method(this, "_settings_changed");
-			undo_redo->add_undo_method(this, "_settings_changed");
-			undo_redo->commit_action();*/
-
 			ProjectSettings::get_singleton()->clear(name);
 			_update_actions();
 			_settings_changed();
@@ -596,16 +544,6 @@ void InputMapEditor::_action_button_pressed(Object *p_obj, int p_column, int p_i
 			ERR_FAIL_INDEX(idx, events.size());
 			events.remove(idx);
 			action["events"] = events;
-
-			/*
-			undo_redo->create_action(TTR("Erase Input Action Event"));
-			undo_redo->add_do_method(ProjectSettings::get_singleton(), "set", name, action);
-			undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set", name, old_val);
-			undo_redo->add_do_method(this, "_update_actions");
-			undo_redo->add_undo_method(this, "_update_actions");
-			undo_redo->add_do_method(this, "_settings_changed");
-			undo_redo->add_undo_method(this, "_settings_changed");
-			undo_redo->commit_action();*/
 
 			ProjectSettings::get_singleton()->set(name, action);
 			_update_actions();
@@ -902,17 +840,6 @@ void InputMapEditor::drop_data_fw(const Point2 &p_point, const Variant &p_data, 
 		order = iterator_order;
 		iterator = is_below ? iterator->get_next() : iterator->get_prev();
 	}
-	/*
-	undo_redo->add_do_method(ProjectSettings::get_singleton(), "set_order", target_name, order);
-	undo_redo->add_do_method(ProjectSettings::get_singleton(), "set_order", selected_name, target_order);
-	undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set_order", target_name, target_order);
-	undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set_order", selected_name, old_order);
-
-	undo_redo->add_do_method(this, "_update_actions");
-	undo_redo->add_undo_method(this, "_update_actions");
-	undo_redo->add_do_method(this, "_settings_changed");
-	undo_redo->add_undo_method(this, "_settings_changed");
-	undo_redo->commit_action();*/
 
 	ProjectSettings::get_singleton()->set_order(target_name, order);
 	ProjectSettings::get_singleton()->set_order(selected_name, target_order);
