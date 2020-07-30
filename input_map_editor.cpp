@@ -1016,13 +1016,6 @@ InputMapEditor::InputMapEditor() {
 
 	setting = false;
 
-	//translations
-	TabContainer *translations = memnew(TabContainer);
-	translations->set_tab_align(TabContainer::ALIGN_LEFT);
-	translations->set_name(TTR("Localization"));
-	tab_container->add_child(translations);
-	//remap for properly select language in popup
-
 	timer = memnew(Timer);
 	timer->set_wait_time(1.5);
 	timer->connect("timeout", ProjectSettings::get_singleton(), "save");
