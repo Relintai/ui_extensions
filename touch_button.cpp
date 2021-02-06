@@ -22,6 +22,8 @@ SOFTWARE.
 
 #include "touch_button.h"
 
+#include "core/version.h"
+
 void TouchButton::_notification(int p_what) {
 
 	switch (p_what) {
@@ -108,7 +110,9 @@ void TouchButton::_unhandled_input(Ref<InputEvent> p_event) {
 		return;
 	}
 
+#if VERSION_MAJOR <= 3
 	Button::_unhandled_input(p_event);
+#endif
 }
 
 void TouchButton::_bind_methods() {

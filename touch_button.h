@@ -23,7 +23,14 @@ SOFTWARE.
 #ifndef TOUCH_BUTTON_H
 #define TOUCH_BUTTON_H
 
+#include "core/version.h"
+
+#if VERSION_MAJOR > 3
+#include "core/config/engine.h"
+#else
 #include "core/engine.h"
+#endif
+
 #include "core/os/os.h"
 #include "scene/gui/button.h"
 #include "scene/main/viewport.h"

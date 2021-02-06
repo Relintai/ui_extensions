@@ -30,10 +30,18 @@
 
 #include "input_map_editor.h"
 
+#include "core/version.h"
+
+#if VERSION_MAJOR > 3
+#include "core/string/ustring.h"
+#else
 #include "core/global_constants.h"
-#include "core/os/keyboard.h"
 #include "core/project_settings.h"
 #include "core/translation.h"
+#include "core/ustring.h"
+#endif
+
+#include "core/os/keyboard.h"
 #include "editor/editor_export.h"
 #include "editor/editor_node.h"
 #include "editor/editor_scale.h"
@@ -48,8 +56,6 @@
 #include "core/input/input_map.h"
 #define CONNECT(sig, obj, target_method_class, method) connect(sig, callable_mp(obj, &target_method_class::method))
 #endif
-
-#include "core/ustring.h"
 
 static const char *_button_names[JOY_BUTTON_MAX] = {
 	"DualShock Cross, Xbox A, Nintendo B",
@@ -384,7 +390,12 @@ void InputMapEditor::_wait_for_key(const Ref<InputEvent> &p_event) {
 #endif
 
 		press_a_key_label->set_text(str);
+
+#if VERSION_MAJOR < 4
 		press_a_key->get_ok()->set_disabled(false);
+#else
+		press_a_key->get_ok_button()->set_disabled(false);
+#endif
 
 #if VERSION_MAJOR < 4
 		press_a_key->accept_event();
@@ -400,7 +411,13 @@ void InputMapEditor::_add_item(int p_item, Ref<InputEvent> p_exiting_event) {
 	switch (add_type) {
 		case INPUT_KEY: {
 			press_a_key_label->set_text(("Press a Key..."));
+
+#if VERSION_MAJOR < 4
 			press_a_key->get_ok()->set_disabled(true);
+#else
+			press_a_key->get_ok_button()->set_disabled(true);
+#endif
+
 			last_wait_for_key = Ref<InputEvent>();
 			press_a_key->popup_centered(Size2(250, 80));
 			press_a_key->grab_focus();
@@ -429,10 +446,21 @@ void InputMapEditor::_add_item(int p_item, Ref<InputEvent> p_exiting_event) {
 			if (mb.is_valid()) {
 				device_index->select(mb->get_button_index() - 1);
 				_set_current_device(mb->get_device());
+
+#if VERSION_MAJOR < 4
 				device_input->get_ok()->set_text("Change");
+#else
+				device_input->get_ok_button()->set_text("Change");
+#endif
+
 			} else {
 				_set_current_device(0);
+
+#if VERSION_MAJOR < 4
 				device_input->get_ok()->set_text("Add");
+#else
+				device_input->get_ok_button()->set_text("Add");
+#endif
 			}
 
 		} break;
@@ -454,10 +482,21 @@ void InputMapEditor::_add_item(int p_item, Ref<InputEvent> p_exiting_event) {
 			if (jm.is_valid()) {
 				device_index->select(jm->get_axis() * 2 + (jm->get_axis_value() > 0 ? 1 : 0));
 				_set_current_device(jm->get_device());
+
+#if VERSION_MAJOR < 4
 				device_input->get_ok()->set_text("Change");
+#else
+				device_input->get_ok_button()->set_text("Change");
+#endif
+
 			} else {
 				_set_current_device(0);
+
+#if VERSION_MAJOR < 4
 				device_input->get_ok()->set_text("Add");
+#else
+				device_input->get_ok_button()->set_text("Add");
+#endif
 			}
 
 		} break;
@@ -479,10 +518,21 @@ void InputMapEditor::_add_item(int p_item, Ref<InputEvent> p_exiting_event) {
 			if (jb.is_valid()) {
 				device_index->select(jb->get_button_index());
 				_set_current_device(jb->get_device());
+
+#if VERSION_MAJOR < 4
 				device_input->get_ok()->set_text("Change");
+#else
+				device_input->get_ok_button()->set_text("Change");
+#endif
+
 			} else {
 				_set_current_device(0);
+
+#if VERSION_MAJOR < 4
 				device_input->get_ok()->set_text("Add");
+#else
+				device_input->get_ok_button()->set_text("Add");
+#endif
 			}
 
 		} break;
@@ -977,11 +1027,17 @@ InputMapEditor::InputMapEditor() {
 
 	Label *l = memnew(Label);
 	l->set_text("Press a Key...");
-	l->set_anchors_and_margins_preset(Control::PRESET_WIDE);
 	l->set_align(Label::ALIGN_CENTER);
+
+#if VERSION_MAJOR < 4
+	l->set_anchors_and_margins_preset(Control::PRESET_WIDE);
 	l->set_margin(MARGIN_TOP, 20);
 	l->set_anchor_and_margin(MARGIN_BOTTOM, ANCHOR_BEGIN, 30);
 	press_a_key->get_ok()->set_disabled(true);
+#else
+	press_a_key->get_ok_button()->set_disabled(true);
+#endif
+
 	press_a_key_label = l;
 	press_a_key->add_child(l);
 	press_a_key->CONNECT("gui_input", this, InputMapEditor, _wait_for_key);
@@ -989,7 +1045,13 @@ InputMapEditor::InputMapEditor() {
 
 	device_input = memnew(ConfirmationDialog);
 	add_child(device_input);
+
+#if VERSION_MAJOR < 4
 	device_input->get_ok()->set_text("Add");
+#else
+	device_input->get_ok_button()->set_text("Add");
+#endif
+
 	device_input->CONNECT("confirmed", this, InputMapEditor, _device_input_add);
 
 	HBoxContainer *hbc = memnew(HBoxContainer);
