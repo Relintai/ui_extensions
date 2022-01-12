@@ -8,6 +8,7 @@ def get_doc_classes():
     return [
         "BSInputEventKey",
         "TouchButton",
+        "InputMapEditor"
     ]
 
 def get_doc_path():
