@@ -25,10 +25,8 @@ SOFTWARE.
 #include "core/version.h"
 
 void TouchButton::_notification(int p_what) {
-
 	switch (p_what) {
 		case NOTIFICATION_ENTER_TREE: {
-
 			if (!Engine::get_singleton()->is_editor_hint()) {
 				set_process_input(is_visible_in_tree());
 			}
@@ -49,7 +47,6 @@ void TouchButton::_notification(int p_what) {
 }
 
 void TouchButton::_input(Ref<InputEvent> p_event) {
-
 	if (!get_tree())
 		return;
 
@@ -67,14 +64,24 @@ void TouchButton::_input(Ref<InputEvent> p_event) {
 		get_viewport()->set_input_as_handled();
 
 		Ref<InputEventMouseButton> ev;
+#if VERSION_MAJOR < 4
 		ev.instance();
+#else
+		ev.instantiate();
+#endif
 
+#if VERSION_MAJOR < 4
 		ev->set_button_index(BUTTON_LEFT);
+#else
+		ev->set_button_index(MouseButton::LEFT);
+#endif
 		ev->set_pressed(b->is_pressed());
 		ev->set_position(b->get_position());
 		ev->set_global_position(b->get_position());
 
+#if VERSION_MAJOR <= 3
 		BaseButton::_gui_input(ev);
+#endif
 		update();
 	}
 	/*
@@ -100,11 +107,12 @@ void TouchButton::_gui_input(Ref<InputEvent> p_event) {
 		return;
 	}
 
-	BaseButton::_gui_input(p_event);
+#if VERSION_MAJOR <= 3
+	BaseButton::_gui_input(ev);
+#endif
 }
 
 void TouchButton::_unhandled_input(Ref<InputEvent> p_event) {
-
 	if (p_event->get_device() == -1) {
 		//accept_event();
 		return;
