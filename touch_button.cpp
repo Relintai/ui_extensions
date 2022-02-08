@@ -108,7 +108,7 @@ void TouchButton::_gui_input(Ref<InputEvent> p_event) {
 	}
 
 #if VERSION_MAJOR <= 3
-	BaseButton::_gui_input(ev);
+	BaseButton::_gui_input(p_event);
 #endif
 }
 
