@@ -203,7 +203,7 @@ void InputMapEditor::_device_input_add() {
 		case INPUT_MOUSE_BUTTON: {
 			Ref<InputEventMouseButton> mb;
 #if VERSION_MAJOR < 4
-			mb.instance();
+			mb.instantiate();
 			mb->set_button_index(device_index->get_selected() + 1);
 #else
 			mb.instantiate();
@@ -226,7 +226,7 @@ void InputMapEditor::_device_input_add() {
 		case INPUT_JOY_MOTION: {
 			Ref<InputEventJoypadMotion> jm;
 #if VERSION_MAJOR < 4
-			jm.instance();
+			jm.instantiate();
 			jm->set_axis(device_index->get_selected() >> 1);
 #else
 			jm.instantiate();
@@ -251,7 +251,7 @@ void InputMapEditor::_device_input_add() {
 		case INPUT_JOY_BUTTON: {
 			Ref<InputEventJoypadButton> jb;
 #if VERSION_MAJOR < 4
-			jb.instance();
+			jb.instantiate();
 			jb->set_button_index(device_index->get_selected());
 #else
 			jb.instantiate();
@@ -310,7 +310,7 @@ void InputMapEditor::_press_a_key_confirm() {
 	Ref<BSInputEventKey> ie;
 
 #if VERSION_MAJOR < 4
-	ie.instance();
+	ie.instantiate();
 	ie->set_scancode(last_wait_for_key->get_scancode());
 	ie->set_shift(last_wait_for_key->get_shift());
 	ie->set_alt(last_wait_for_key->get_alt());

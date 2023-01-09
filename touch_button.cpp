@@ -65,7 +65,7 @@ void TouchButton::_input(Ref<InputEvent> p_event) {
 
 		Ref<InputEventMouseButton> ev;
 #if VERSION_MAJOR < 4
-		ev.instance();
+		ev.instantiate();
 #else
 		ev.instantiate();
 #endif
@@ -89,7 +89,7 @@ void TouchButton::_input(Ref<InputEvent> p_event) {
 
 	if (mm.is_valid() && _is_point_inside(mm->get_position())) {
 		Ref<InputEventMouseMotion> ev;
-		ev.instance();
+		ev.instantiate();
 
 		ev->set_relative(mm->get_relative());
 		ev->set_speed(mm->get_speed());
